@@ -98,7 +98,8 @@ The goal is to validate the main functionalities of the API, understand request�
 5. Check results and take screenshots of test reports.
     
 
-## 📂 Project Structure:
+## 📂 Project Structure
+```bash
 
 Swagger-Petstore-API-Testing/  
 │  
@@ -112,7 +113,8 @@ Swagger-Petstore-API-Testing/
 │ └── example_test_results.png  
 │  
 └── README.md
-
+```
+---
 ✅ Results  
 All endpoints were tested successfully:
 
@@ -122,4 +124,16 @@ Request chaining with variables tested successfully
 
 All CRUD operations completed for Users, Products, and Carts
 
-🧑‍💻 Created by Eslam Roshdy
+## 🧪 Test Coverage
+- ✅ Pets CRUD operations  
+- ✅ Find pets by status  
+- ✅ Users CRUD and login/logout  
+- ✅ Store orders and inventory  
+- ⚠️ Negative & Auth tests using `api_key`
+
+---
+
+## 🧠 Author
+**Eslam Roshdy**  
+📧 eslam@example.com  
+🔗 [GitHub Profile](https://github.com/YOUR_USERNAME)
