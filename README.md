@@ -135,5 +135,5 @@ All CRUD operations completed for Users, Products, and Carts
 
 ## 🧠 Author
 **Eslam Roshdy**  
-📧 eslam@example.com  
-🔗 [GitHub Profile](https://github.com/YOUR_USERNAME)
+📧 esroshdy22@gmail.com  
+🔗 [GitHub Profile](https://github.com/EslamR0shdy94)
