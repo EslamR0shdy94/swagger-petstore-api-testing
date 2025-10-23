@@ -129,7 +129,6 @@ All CRUD operations completed for Users, Products, and Carts
 - ✅ Find pets by status  
 - ✅ Users CRUD and login/logout  
 - ✅ Store orders and inventory  
-- ⚠️ Negative & Auth tests using `api_key`
 
 ---
 
