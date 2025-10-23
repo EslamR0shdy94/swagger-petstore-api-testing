@@ -1,0 +1,1544 @@
+{
+	"info": {
+		"_postman_id": "d36e5013-bde3-4140-8faf-48a138c312d1",
+		"name": "Pet Store API Testing",
+		"description": "# 🐾 Swagger Petstore - Manual API Testing Project\n\n## 📌 Project Overview\n\nThis project focuses on **manual API testing** for the [Swagger Petstore](https://petstore.swagger.io) API using **Postman**.  \nIt covers full **CRUD operations** for pets, along with **auth tests**, and includes both **positive and negative** test scenarios.\n\nThe goal is to validate the main functionalities of the API, understand request–response structures, and practice writing assertions using Postman tests.\n\n---\n\n## 🔗 API Information\n\n- **Base URL:** `https://petstore.swagger.io/v2`\n    \n- **Authentication:** API Key (`api_key`) header supported.\n    \n- OperationMethodEndpointCreate PetPOST`/pet`Get Pet by IDGET`/pet/{petId}`Update PetPUT`/pet`Delete PetDELETE`/pet/{petId}`User InfoGET`/user/{username}`\n    \n\n---\n\n## 🧪 Tools Used\n\n- **Postman** → for API testing and assertions\n    \n- **Swagger Docs** → for exploring endpoints\n    \n- **JSON Formatter** → for pretty-printing API responses\n    \n- **Newman (optional)** → for running the Postman collection via CLI and generating reports\n    \n\n---\n\n## 🧩 Test Coverage\n\n### ✅ Functional Tests\n\n- Verify CRUD operations on `/pet` endpoint.\n    \n- Verify user details retrieval via `/user/{username}`.\n    \n- Validate correct response codes (200, 404, etc.).\n    \n\n### ⚠️ Negative Tests\n\n- Create pet with missing fields → expect 400 or error message.\n    \n- Get pet by invalid ID → expect 404 Not Found.\n    \n- Delete pet twice → second delete should fail gracefully.\n    \n\n### 🔁 Regression Tests\n\n- Re-run main functional tests to confirm stable functionality after updates.\n    \n- Validate that all endpoints return consistent schema and structure.\n    \n\n---\n\n## ⚙️ Environment Setup\n\n### 🔸Environment Variables\n\n| **Variable** | **Value** | **Description** |\n| --- | --- | --- |\n| `base_url` | `https://petstore.swagger.io/v2` | Base URL of Swagger Petstore API |\n| `user_name` | `eslam22` | Username used for login and user creation tests |\n| `user_password` | `83r5^._` | Password for test user |\n| `token` | _(dynamic)_ | Authentication token (if returned from login) |\n| `user_email` | `eslam@example.com` | Default email used in user creation |\n| `usersList` | `[\"roshdyjr\",\"marwan5\"]` | Static list of usernames for batch creation |\n| `usersArray` | `[\"ahmed_f\",\"mona_s\"]` | Additional test user array |\n| `order_id` | _(dynamic)_ | Used to store order ID after placing an order |\n| `rex_id` | `3` | Pet ID for Rex (test pet) |\n| `cat_id` | `4` | Pet ID for Cat (test pet) |\n| `api_key` | `special-key` | API key used for authenticated endpoints |\n| `delete_pet_id` | `158` | Pet ID reserved for delete tests |\n\n## 🚀 How to Run Tests\n\n### 🧭 In Postman:\n\n1. Import the collection:  \n    `Collections/SwaggerPetstore.postman_collection.json`\n    \n2. Import the environment:  \n    `Environments/Petstore.postman_environment.json`\n    \n3. Set the `base_url` and `api_key` values.\n    \n4. Run individual requests manually **or** execute the entire collection using **Collection Runner**.\n    \n5. Check results and take screenshots of test reports.\n    \n\n## 📂 Project Structure:\n\nSwagger-Petstore-API-Testing/  \n│  \n├── 📁 Collections/  \n│ └── SwaggerPetstore.postman_collection.json  \n│  \n├── 📁 Environments/  \n│ └── Petstore.postman_environment.json  \n│  \n├── 📁 Screenshots/  \n│ └── example_test_results.png  \n│  \n└── README.md\n\n✅ Results  \nAll endpoints were tested successfully:\n\nStatus codes validated (200, 201, 400, 404)\n\nRequest chaining with variables tested successfully\n\nAll CRUD operations completed for Users, Products, and Carts\n\n🧑‍💻 Created by Eslam Roshdy",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33701756",
+		"_collection_link": "https://e-commerce-api-testing-project.postman.co/workspace/c5eb1d30-38b0-4ca0-958c-8941a43da868/collection/33701756-d36e5013-bde3-4140-8faf-48a138c312d1?action=share&source=collection_link&creator=33701756"
+	},
+	"item": [
+		{
+			"name": "pets",
+			"item": [
+				{
+					"name": "Create rex dog",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status is 200\", () => pm.response.to.have.status(200));\r",
+									"pm.test(\"Response has id and name\", () => {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json).to.have.property(\"id\");\r",
+									"    pm.expect(json.name).to.eql(\"Rex\");\r",
+									"});\r",
+									"let json = pm.response.json();\r",
+									"pm.environment.set(\"rex_id\", json.id || \"\");"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 3,\r\n  \"category\": { \"id\": 1, \"name\": \"dogs\" },\r\n  \"name\": \"Rex\",\r\n  \"photoUrls\": [\"http://example.com/photo1.jpg\"],\r\n  \"tags\": [{\"id\": 1, \"name\": \"tag1\"}],\r\n  \"status\": \"available\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/pet",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"pet"
+							]
+						},
+						"description": "**Purpose:**\nThis request creates a new pet entry in the Pet Store system by sending a POST request to `{{base_url}}/pet`. It is typically used to add a new pet with specific details such as ID, category, name, photo URLs, tags, and status.\n\n**Request Body Structure:**\nThe request body must be in raw JSON format and should include the following fields:\n\n```\n{\n  \"id\": <integer>,                // Unique identifier for the pet\n  \"category\": {\n    \"id\": <integer>,              // Category ID (e.g., 1)\n    \"name\": <string>              // Category name (e.g., \"dogs\")\n  },\n  \"name\": <string>,               // Name of the pet (e.g., \"Rex\")\n  \"photoUrls\": [<string>],        // Array of photo URLs\n  \"tags\": [\n    {\n      \"id\": <integer>,            // Tag ID\n      \"name\": <string>            // Tag name\n    }\n  ],\n  \"status\": <string>              // Pet status (e.g., \"available\")\n}\n```\n\n**Response Tests:**\n- Validates that the response status code is 200, indicating a successful creation.\n- Checks that the response contains both an `id` and a `name` property, and that the `name` matches the value sent in the request (e.g., \"Rex\").\n- Stores the returned pet `id` in the environment variable `rex_id` for use in subsequent requests.\n\nThis request is part of the [Pet Store API Testing](collection/33701756-d36e5013-bde3-4140-8faf-48a138c312d1) collection."
+					},
+					"response": []
+				},
+				{
+					"name": "upload photo to rex dog",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"check message if contains file uploaded\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"File uploaded\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "pet id",
+									"value": "{{rex_id}}",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"value": "Desktop/dog1.avif",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/pet/{{rex_id}}/uploadImage",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"pet",
+								"{{rex_id}}",
+								"uploadImage"
+							]
+						},
+						"description": "Uploads an image for a specific pet.\n\n**Purpose:**\nThis POST request allows you to upload an image file for a pet identified by its unique ID.\n\n**URL:**\n`{{base_url}}/pet/{{rex_id}}/uploadImage`\n- `base_url`: The base URL of the API (set in your environment variables).\n- `rex_id`: The unique identifier of the pet to which the image will be uploaded (set in your environment variables).\n\n**Request Body (multipart/form-data):**\n- `pet id`: The ID of the pet (should match `rex_id`).\n- `file`: The image file to upload (e.g., `dog1.avif`).\n\n**Expected Response:**\n- Status code: 200 if the upload is successful.\n- Response body should include a message confirming the file upload (e.g., contains \"File uploaded\").\n\n**Validation:**\n- The request includes tests to verify that the status code is 200 and the response message confirms the file upload."
+					},
+					"response": []
+				},
+				{
+					"name": "check rex dog",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"let rex = pm.environment.get(\"rex_id\");\r",
+									"pm.test(\"Response has name\", () => {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json.name).to.eql(\"Rex\");\r",
+									"});\r",
+									"pm.test(\"Response has id equal to the requested dog id\", () => {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json.id).to.equal(rex);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{base_url}}/pet/{{rex_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"pet",
+								"{{rex_id}}"
+							]
+						},
+						"description": "Retrieves the details of a pet by its unique ID. This request is specifically used to fetch information for a dog named Rex using the variable {{rex_id}}. The associated tests validate that the response status is 200 (OK), the returned pet's name is 'Rex', and the ID in the response matches the requested dog ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Create German dog",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status is 200\", () => pm.response.to.have.status(200));\r",
+									"pm.test(\"Response has id and name\", () => {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json).to.have.property(\"id\");\r",
+									"    pm.expect(json.name).to.eql(\"German\");\r",
+									"});\r",
+									"let json = pm.response.json();\r",
+									"pm.environment.set(\"ger_id\", json.id || \"\");"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 4,\r\n  \"category\": { \"id\": 1, \"name\": \"dogs\" },\r\n  \"name\": \"German\",\r\n  \"photoUrls\": [\"http://example.com/photo12.jpg\"],\r\n  \"tags\": [{\"id\": 2, \"name\": \"tag2\"}],\r\n  \"status\": \"available\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/pet",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"pet"
+							]
+						},
+						"description": "**Purpose:**\nThis POST request creates a new pet in the store.\n\n**Request Body Structure:**\n- `id` (integer): Unique identifier for the pet.\n- `category` (object): Contains `id` (integer) and `name` (string) for the pet's category.\n- `name` (string): Name of the pet.\n- `photoUrls` (array of strings): List of photo URLs for the pet.\n- `tags` (array of objects): Each tag has an `id` (integer) and `name` (string).\n- `status` (string): Pet status (e.g., \"available\").\n\n**Example Body:**\n```json\n{\n  \"id\": 4,\n  \"category\": { \"id\": 1, \"name\": \"dogs\" },\n  \"name\": \"German\",\n  \"photoUrls\": [\"http://example.com/photo12.jpg\"],\n  \"tags\": [{ \"id\": 2, \"name\": \"tag2\" }],\n  \"status\": \"available\"\n}\n```\n\n**Response Tests:**\n- Validates that the response status is 200 (success).\n- Checks that the response contains an `id` and that the `name` matches the created pet (\"German\").\n- Saves the returned pet `id` to the environment variable `ger_id` for use in subsequent requests."
+					},
+					"response": []
+				},
+				{
+					"name": "check german dog",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"let german = pm.environment.get(\"ger_id\");\r",
+									"pm.test(\"Response has name\", () => {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json.name).to.eql(\"German\");\r",
+									"});\r",
+									"pm.test(\"Response has id equal to the requested dog id\", () => {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json.id).to.equal(german);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{base_url}}/pet/{{ger_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"pet",
+								"{{ger_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update dog to cat",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response has id and name\", () => {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json).to.have.property(\"id\");\r",
+									"    pm.expect(json.name).to.eql(\"sheraz\");\r",
+									"});\r",
+									"let json = pm.response.json();\r",
+									"pm.environment.set(\"cat_id\", json.id || \"\");\r",
+									"pm.environment.unset(\"ger_id\");"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": {{ger_id}},\r\n  \"category\": { \"id\": 2, \"name\": \"cats\" },\r\n  \"name\": \"sheraz\",\r\n  \"photoUrls\": [\"http://example.com/photo3.jpg\"],\r\n  \"tags\": [{\"id\": 12, \"name\": \"tag12\"}],\r\n  \"status\": \"available\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/pet",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"pet"
+							]
+						},
+						"description": "This PUT request updates a pet's information in the store. It changes the pet's category to 'cats', updates the name to 'sheraz', and sets the status to 'available'. Use this request to modify an existing pet's details by providing the pet ID and the new information in the request body."
+					},
+					"response": []
+				},
+				{
+					"name": "update cat",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "local cat",
+									"type": "text"
+								},
+								{
+									"key": "status",
+									"value": "pending",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/pet/{{cat_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"pet",
+								"{{cat_id}}"
+							]
+						},
+						"description": "Updates a cat's information by specifying the cat ID in the URL path parameter ({{cat_id}}). The request body must include the cat's name and status as urlencoded form data fields. On success, the API responds with status code 200."
+					},
+					"response": []
+				},
+				{
+					"name": "check cat after update",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"new name of the cat is local cat\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"local cat\");\r",
+									"});\r",
+									"pm.test(\"status of the cat is sold\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"sold\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pet/{{cat_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"pet",
+								"{{cat_id}}"
+							]
+						},
+						"description": "Retrieves the details of a specific cat from the Pet Store API using the provided cat ID.\n\nPurpose:\nThis GET request fetches information about a single cat resource. It is typically used to verify the current state or attributes of a cat after an update or other operation.\n\nPath Variables:\n- `{{base_url}}`: The base URL for the Pet Store API, set in your environment.\n- `{{cat_id}}`: The unique identifier of the cat to retrieve. This value should be set in your environment or as a path variable before sending the request.\n\nResponse:\nReturns the cat's details, such as name, status, and other attributes, if the cat exists. If the cat is not found, an appropriate error response is returned."
+					},
+					"response": []
+				},
+				{
+					"name": "find all sold pets",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"check retrived pets are sold\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"sold\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pet/findByStatus?status=sold",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"pet",
+								"findByStatus"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "sold"
+								}
+							]
+						},
+						"description": "This GET request retrieves a list of pets with the status 'sold' from the Pet Store API. It sends a request to the endpoint `/pet/findByStatus` with the query parameter `status=sold`. The response contains an array of pet objects that have been marked as sold, including details such as pet ID, name, category, photo URLs, and tags."
+					},
+					"response": []
+				},
+				{
+					"name": "find all available pets",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"check retrived pets are available\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"available\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pet/findByStatus?status=available",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"pet",
+								"findByStatus"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "available"
+								}
+							]
+						},
+						"description": "**Purpose:**\nThis GET request retrieves a list of pets from the Pet Store based on their current status. It is useful for filtering pets by their availability or adoption status.\n\n**Endpoint:**\n`GET {{base_url}}/pet/findByStatus`\n\n**Query Parameter:**\n- `status` (required): Filters the pets by their status. Possible values are:\n  - `available`: Returns pets that are currently available for adoption or sale.\n  - `pending`: Returns pets whose adoption or sale is pending.\n  - (Other statuses may be supported by the API, refer to the API documentation for a complete list.)\n\n**Usage Example:**\nTo fetch all available pets:\n```\nGET {{base_url}}/pet/findByStatus?status=available\n```\n\n**Response:**\nThe response is a JSON array of pet objects matching the specified status. Each object typically contains details such as the pet's ID, name, category, photo URLs, tags, and status.\n\n**Typical Response Structure:**\n```\n[\n  {\n    \"id\": 123,\n    \"name\": \"Rex\",\n    \"category\": { \"id\": 1, \"name\": \"Dogs\" },\n    \"photoUrls\": [\"url1\", \"url2\"],\n    \"tags\": [{ \"id\": 1, \"name\": \"friendly\" }],\n    \"status\": \"available\"\n  },\n  ...\n]\n```\n\n**Notes:**\n- Ensure the `status` parameter is provided; otherwise, the request may return an error or an empty list.\n- The endpoint supports filtering by a single status value per request."
+					},
+					"response": []
+				},
+				{
+					"name": "find all pending pets",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"check retrived pets are pending \", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"pending \");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pet/findByStatus?status=pending ",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"pet",
+								"findByStatus"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "pending "
+								}
+							]
+						},
+						"description": "Retrieves a list of pets filtered by their status. \n\nQuery Parameter:\n- `status` (required): The status of the pets to filter by. Example: `pending`.\n\nResponse:\nReturns an array of pet objects that match the specified status. Each object contains details about a pet whose status is 'pending'."
+					},
+					"response": []
+				},
+				{
+					"name": "Create horse",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status is 200\", () => pm.response.to.have.status(200));\r",
+									"pm.test(\"Response has id and name\", () => {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json).to.have.property(\"id\");\r",
+									"    pm.expect(json.name).to.eql(\"horse\");\r",
+									"});\r",
+									"let json = pm.response.json();\r",
+									"pm.environment.set(\"delete_pet_id\", json.id || \"\");"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 158,\r\n  \"category\": { \"id\": 15, \"name\": \"horses\" },\r\n  \"name\": \"horse\",\r\n  \"photoUrls\": [\"http://example.com/photo120.jpg\"],\r\n  \"tags\": [{\"id\": 20, \"name\": \"tag20\"}],\r\n  \"status\": \"available\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/pet",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"pet"
+							]
+						},
+						"description": "## Create a New Pet (Horse)\n\nThis request allows you to add a new pet to the store with the category set to \"horses\" and the name set to \"horse\". It is intended for creating a pet resource in the system, which can then be managed or referenced in subsequent API operations.\n\n### Endpoint\n`POST {{base_url}}/pet`\n\n### Purpose\nUse this endpoint to create a new pet entry in the store. The example provided creates a horse, but you can modify the request body to create pets of other categories or names as needed.\n\n### Request Body Structure\nSend a JSON object in the request body with the following structure:\n\n```\n{\n  \"id\": <integer>,\n  \"category\": {\n    \"id\": <integer>,\n    \"name\": <string>\n  },\n  \"name\": <string>,\n  \"photoUrls\": [<string>],\n  \"tags\": [\n    {\n      \"id\": <integer>,\n      \"name\": <string>\n    }\n  ],\n  \"status\": <string> // e.g., \"available\", \"pending\", \"sold\"\n}\n```\n\n#### Example\n```\n{\n  \"id\": 158,\n  \"category\": { \"id\": 15, \"name\": \"horses\" },\n  \"name\": \"horse\",\n  \"photoUrls\": [\"http://example.com/photo120.jpg\"],\n  \"tags\": [{ \"id\": 20, \"name\": \"tag20\" }],\n  \"status\": \"available\"\n}\n```\n\n- **id**: Unique identifier for the pet (integer).\n- **category**: Object specifying the category id and name (e.g., horses).\n- **name**: Name of the pet (e.g., horse).\n- **photoUrls**: Array of photo URLs for the pet.\n- **tags**: Array of tag objects for categorization.\n- **status**: Pet availability status (\"available\", \"pending\", or \"sold\").\n\n### Expected Response\n- **Status Code:** 200 OK (on success)\n- **Response Body:** JSON object representing the newly created pet, echoing the submitted data and including the assigned id.\n\n#### Example Response\n```\n{\n  \"id\": 158,\n  \"category\": { \"id\": 15, \"name\": \"horses\" },\n  \"name\": \"horse\",\n  \"photoUrls\": [\"http://example.com/photo120.jpg\"],\n  \"tags\": [{ \"id\": 20, \"name\": \"tag20\" }],\n  \"status\": \"available\"\n}\n```\n\n### Postman Test Script\nThe post-response script validates that:\n- The response status is 200.\n- The response contains both `id` and `name` fields.\n- The environment variable `delete_pet_id` is set from the response `id` for use in subsequent requests (such as deleting the created pet).\n\n---\n**Tip:** Update the request body as needed to create pets with different attributes."
+					},
+					"response": []
+				},
+				{
+					"name": "check horse",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response has id and name\", () => {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json).to.have.property(\"id\");\r",
+									"    pm.expect(json.name).to.eql(\"horse\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pet/{{delete_pet_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"pet",
+								"{{delete_pet_id}}"
+							]
+						},
+						"description": "**Purpose:**\nThis GET request retrieves detailed information about a specific pet from the Pet Store API using the pet's unique ID.\n\n**Endpoint:**\n`GET {{base_url}}/pet/{{delete_pet_id}}`\n\n**Parameters:**\n- `delete_pet_id` (path variable): The unique identifier of the pet to retrieve. This value should be set to the ID of the pet you want to look up.\n\n**Expected Response:**\n- Returns a JSON object containing the pet's details, such as `id`, `name`, and other attributes.\n- If the pet exists, the response will include its information with a status code of 200.\n- If the pet does not exist, a 404 status code may be returned.\n\n**Usage Notes:**\n- Ensure that the `delete_pet_id` variable is set to a valid pet ID before sending the request.\n- This request is useful for verifying the existence or details of a pet, especially after performing operations like deletion or update."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete pet",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{api_key}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/pet/{{delete_pet_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"pet",
+								"{{delete_pet_id}}"
+							]
+						},
+						"description": "**Purpose:**\nThis DELETE request removes a pet from the store by its unique ID.\n\n**Request URL:**\n`{{base_url}}/pet/{{delete_pet_id}}`\n- `{{base_url}}`: The base URL of the API (set in your environment variables).\n- `{{delete_pet_id}}`: The unique identifier of the pet to be deleted (set in your environment variables).\n\n**Required Header:**\n- `x-api-key`: Your API key for authentication (set as `{{api_key}}` in your environment variables).\n\n**Expected Response:**\n- **Status Code:** 200 OK\n- Indicates the pet was deleted successfully from the store.\n\nUse this request to permanently remove a pet by specifying its ID in the URL path variable."
+					},
+					"response": []
+				},
+				{
+					"name": "check after delete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pet/{{delete_pet_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"pet",
+								"{{delete_pet_id}}"
+							]
+						},
+						"description": "**Purpose:**\nThis GET request is used to check the existence of a pet by its unique ID after a delete operation. It is typically used to verify that a pet has been successfully deleted from the system.\n\n**Path Variables:**\n- `base_url`: The base URL of the API server (set in the environment).\n- `delete_pet_id`: The unique identifier of the pet that was targeted for deletion. This value should match the ID of the pet you attempted to delete.\n\n**Expected Response:**\n- **Status Code 404:** Indicates that the pet with the specified ID does not exist, confirming successful deletion.\n- If the pet still exists, a different status code (such as 200) may be returned, indicating the pet was not deleted.\n\n**Usage:**\nUse this request after performing a DELETE operation on a pet to ensure the resource is no longer available in the system."
+					},
+					"response": []
+				}
+			],
+			"description": "StartFragment\n\n## **Pet Collection**\n\n### 📘 Description:\n\nThis collection contains all requests related to managing **pets** in the store.  \n  \nYou can perform full **CRUD operations** (Create, Read, Update, Delete) on pet records and test both **positive** and **negative** scenarios.\n\n### 🔧 Includes:\n\n- `POST /pet` → Add a new pet to the store\n    \n- `GET /pet/{petId}` → Retrieve pet details by ID\n    \n- `PUT /pet` → Update an existing pet (using JSON body)\n    \n- `POST /pet/{petId}` → Update pet name and status (using form data)\n    \n- `DELETE /pet/{petId}` → Delete pet by ID\n    \n- `GET /pet/findByStatus` → Find pets by status (available, pending, sold)\n    \n\n### 🧪 Example Tests:\n\n- Validate response code and schema\n    \n- Verify pet ID after creation\n    \n- Check if pet status updates correctly\n    \n- Handle invalid IDs or missing parameters\n    \n\nEndFragment"
+		},
+		{
+			"name": "Store",
+			"item": [
+				{
+					"name": "get pet inventory",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/store/inventory",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"store",
+								"inventory"
+							]
+						},
+						"description": "This GET request retrieves the current inventory status of the pet store. It returns a JSON object representing the quantities of pets available in the store, categorized by status (e.g., available, pending, sold). This endpoint is useful for checking stock levels and managing pet availability."
+					},
+					"response": []
+				},
+				{
+					"name": "place new order",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"let json = pm.response.json();\r",
+									"pm.test(\"Has id and pet array\", () => {\r",
+									"    pm.expect(json).to.have.property(\"id\");\r",
+									"});\r",
+									"pm.environment.set(\"order_id\", json.id || \"\");\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"string_you_want_to_search\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 13,\r\n  \"petId\": 20,\r\n  \"quantity\": 3,\r\n  \"shipDate\": \"2025-10-25T11:50:28.234Z\",\r\n  \"status\": \"placed\",\r\n  \"complete\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/store/order",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"store",
+								"order"
+							]
+						},
+						"description": "**Purpose:**\nPlace a new order for a pet in the Pet Store.\n\n**Endpoint:**\nPOST `{{base_url}}/store/order`\n\n**Request Body Parameters:**\n- `id` (integer): Unique identifier for the order.\n- `petId` (integer): ID of the pet being ordered.\n- `quantity` (integer): Number of items to order.\n- `shipDate` (string, ISO 8601): Date and time when the order should be shipped.\n- `status` (string): Order status (e.g., \"placed\").\n- `complete` (boolean): Whether the order is complete.\n\n**Response:**\nReturns the details of the placed order, including the order ID and all submitted fields. Confirms successful order creation."
+					},
+					"response": []
+				},
+				{
+					"name": "check created order",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"let order_id = pm.environment.get(\"order_id\");\r",
+									"pm.test(\"Check that order_id in response matches saved order_id\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id).to.eql(order_id);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/store/order/{{order_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"store",
+								"order",
+								"{{order_id}}"
+							]
+						},
+						"description": "Retrieves the details of a specific order from the store using the provided order ID. Use this request to fetch all information related to a particular order by specifying its unique identifier in the path parameter."
+					},
+					"response": []
+				},
+				{
+					"name": "delete order",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"let json = pm.response.json();\r",
+									"pm.environment.set(\"order_id\", json.id || \"\");\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": {{order_id}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/store/order/{{order_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"store",
+								"order",
+								"{{order_id}}"
+							]
+						},
+						"description": "## Delete Order by ID\n\nThis request deletes an order from the Pet Store system using the specified `order_id`. It is useful for removing orders that are no longer needed or were created in error.\n\n### Request Overview\n- **Method:** DELETE\n- **URL:** `{{base_url}}/store/order/{{order_id}}`\n\n#### URL Structure\n- `{{base_url}}`: The base URL for the Pet Store API, set in your environment.\n- `{{order_id}}`: The unique identifier of the order to be deleted. This should be set as an environment or collection variable before sending the request.\n\n### Request Body\n- **Type:** Raw JSON\n- **Example:**\n  ```json\n  {\n    \"id\": {{order_id}}\n  }\n  ```\n- The body contains the `id` of the order to delete. This is typically the same as the `order_id` path variable.\n\n### Expected Response\n- **Status Code:** 200 OK (on successful deletion)\n- **Response Body:**\n  - A JSON object containing details of the deleted order, including its `id`.\n  - Example:\n    ```json\n    {\n      \"id\": 12345,\n      \"petId\": 54321,\n      \"quantity\": 1,\n      \"shipDate\": \"2024-06-01T12:00:00.000Z\",\n      \"status\": \"deleted\",\n      \"complete\": true\n    }\n    ```\n\n### Postman Test Script\n- Verifies that the response status is 200.\n- Updates the environment variable `order_id` with the value from the response.\n\n### Usage Notes\n- Ensure `order_id` is set before sending the request.\n- Use this endpoint to clean up test data or manage orders programmatically.\n"
+					},
+					"response": []
+				},
+				{
+					"name": "check deleted order",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/store/order/{{order_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"store",
+								"order",
+								"{{order_id}}"
+							]
+						},
+						"description": "**Purpose:**\nRetrieves the details of a specific purchase order from the pet store by its unique order ID.\n\n**Endpoint:**\n`GET /store/order/{order_id}`\n\n**Parameters:**\n- `order_id` (path parameter): The unique identifier for the order you want to retrieve. This must be a valid order ID that exists in the system.\n\n**Details:**\n- Returns order information such as order status, pet ID, quantity, and shipping details.\n- If the order does not exist, a 404 status code is returned.\n- Useful for checking the status or details of a previously placed order."
+					},
+					"response": []
+				}
+			],
+			"description": "StartFragment\n\n## **Store Collection**\n\n### 📘 Description:\n\nThis collection manages **store orders and inventory**.  \n  \nIt helps test order creation, retrieval, and deletion, as well as checking stock availability.\n\n### 🔧 Includes:\n\n- `POST /store/order` → Place an order for a pet\n    \n- `GET /store/order/{orderId}` → Retrieve order details\n    \n- `DELETE /store/order/{orderId}` → Delete an order\n    \n- `GET /store/inventory` → Check current inventory by status\n    \n\n### 🧪 Example Tests:\n\n- Verify order ID consistency\n    \n- Validate order status and quantity\n    \n- Handle invalid order IDs\n    \n- Check inventory updates dynamically"
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "create multiple users (List)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " [\r\n  {\r\n    \"id\": 11,\r\n    \"username\": \"roshdyjr\",\r\n    \"firstName\": \"roshdy\",\r\n    \"lastName\": \"eslam\",\r\n    \"email\": \"roshdy@example.com\",\r\n    \"password\": \"22334455\",\r\n    \"phone\": \"0122266463\",\r\n    \"userStatus\": 1\r\n  },\r\n  {\r\n    \"id\": 12,\r\n    \"username\": \"marwan5\",\r\n    \"firstName\": \"marwan\",\r\n    \"lastName\": \"eslam\",\r\n    \"email\": \"marawan@example.com\",\r\n    \"password\": \"12345678\",\r\n    \"phone\": \"0122266463\",\r\n    \"userStatus\": 1\r\n  }\r\n ]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/user/createWithList",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"createWithList"
+							]
+						},
+						"description": "**Endpoint:** `POST {{base_url}}/user/createWithList`\n\n**Purpose:**\nThis endpoint allows you to create multiple user accounts in a single API call by submitting a list of user objects. It is useful for bulk user creation scenarios, such as onboarding several users at once.\n\n**Request Body Format:**\n- The request body must be a JSON array of user objects.\n- Each user object should include the following fields:\n  - `id` (integer): Unique identifier for the user.\n  - `username` (string): The user's username.\n  - `firstName` (string): The user's first name.\n  - `lastName` (string): The user's last name.\n  - `email` (string): The user's email address.\n  - `password` (string): The user's password.\n  - `phone` (string): The user's phone number.\n  - `userStatus` (integer): Status code representing the user's status (e.g., 1 for active).\n\n**Example Request Body:**\n```json\n[\n  {\n    \"id\": 11,\n    \"username\": \"roshdyjr\",\n    \"firstName\": \"roshdy\",\n    \"lastName\": \"eslam\",\n    \"email\": \"roshdy@example.com\",\n    \"password\": \"22334455\",\n    \"phone\": \"0122266463\",\n    \"userStatus\": 1\n  },\n  {\n    \"id\": 12,\n    \"username\": \"marwan5\",\n    \"firstName\": \"marwan\",\n    \"lastName\": \"eslam\",\n    \"email\": \"marawan@example.com\",\n    \"password\": \"12345678\",\n    \"phone\": \"0122266463\",\n    \"userStatus\": 1\n  }\n]\n```\n\n**Important Notes:**\n- All fields are required for each user object.\n- The endpoint expects the request body in raw JSON format.\n- The response will indicate the success or failure of the bulk user creation operation."
+					},
+					"response": []
+				},
+				{
+					"name": "check new users (List)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"const users = JSON.parse(pm.environment.get(\"usersList\"));\r",
+									"\r",
+									"users.forEach(user => {\r",
+									"    pm.sendRequest({\r",
+									"        url: `${pm.environment.get(\"base_url\")}/user/${user}`,\r",
+									"        method: 'GET'\r",
+									"    }, function (err, res) {\r",
+									"        pm.test(`Check if ${user} exists`, function () {\r",
+									"            pm.expect(res.code).to.eql(200);\r",
+									"        });\r",
+									"    });\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let users = [\"roshdyjr\", \"marwan5\"];\r",
+									"pm.environment.set(\"usersList\", JSON.stringify(users));\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/user/marwan5",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"marwan5"
+							]
+						},
+						"description": "### Get User Details by Username (`GET /user/{username}`)\n\n---\n\n#### **Purpose**\nRetrieve detailed information about a specific user from the Pet Store API using their username as a path parameter. This is useful for validating user existence and fetching profile data for application logic, testing, or administrative purposes.\n\n#### **What It Retrieves**\n- User profile data, including:\n  - User ID\n  - Username\n  - First and last name\n  - Email\n  - Password (if returned)\n  - Phone\n  - User status\n- The response is expected in JSON format and typically returns a 200 status code if the user exists.\n\n#### **Request Details**\n- **Method:** `GET`\n- **Endpoint:** `{{base_url}}/user/{username}`\n- **Path Parameter:** `username` (e.g., `marwan5`)\n- **Authentication:** Not specified in this request. Ensure the API does not require authentication or that it is handled at the environment or collection level.\n\n#### **Usage Notes**\n- Make sure the `base_url` environment variable is set correctly before running this request.\n- This request is useful for validating the existence and details of a user in the Pet Store system.\n- The included test script checks the status code and iterates over a list of usernames to verify their existence.\n- No request body is required for this endpoint.\n\n#### **Related Collection**\n- [Pet Store API Testing](collection/33701756-d36e5013-bde3-4140-8faf-48a138c312d1)\n"
+					},
+					"response": []
+				},
+				{
+					"name": "create multiple users (Array)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " [\r\n  {\r\n    \"id\": 14,\r\n    \"username\": \"mona_s\",\r\n    \"firstName\": \"mona\",\r\n    \"lastName\": \"saber\",\r\n    \"email\": \"mona@example.com\",\r\n    \"password\": \"22334455\",\r\n    \"phone\": \"0122266463\",\r\n    \"userStatus\": 1\r\n  },\r\n  {\r\n    \"id\": 12,\r\n    \"username\": \"ahmed_f\",\r\n    \"firstName\": \"ahmed\",\r\n    \"lastName\": \"fathy\",\r\n    \"email\": \"ahmed@example.com\",\r\n    \"password\": \"12345678\",\r\n    \"phone\": \"0122266463\",\r\n    \"userStatus\": 1\r\n  }\r\n ]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/user/createWithArray",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"createWithArray"
+							]
+						},
+						"description": "This endpoint creates multiple users in the system by accepting an array of user objects in the request body. Each user object should include the following properties: id, username, firstName, lastName, email, password, phone, and userStatus.\n\n- **Request Body:** Raw JSON array format containing user objects.\n- **Response:** Expects HTTP status 200 with a response time under 1000ms, as validated by the included tests.\n\nUse this endpoint to efficiently add multiple users in a single API call."
+					},
+					"response": []
+				},
+				{
+					"name": "check new users (Array)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"const users = JSON.parse(pm.environment.get(\"usersArray\"));\r",
+									"\r",
+									"users.forEach(user => {\r",
+									"    pm.sendRequest({\r",
+									"        url: `${pm.environment.get(\"base_url\")}/user/${user}`,\r",
+									"        method: 'GET'\r",
+									"    }, function (err, res) {\r",
+									"        pm.test(`Check if ${user} exists`, function () {\r",
+									"            pm.expect(res.code).to.eql(200);\r",
+									"        });\r",
+									"    });\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let users = [\"ahmed_f\", \"mona_s\"];\r",
+									"pm.environment.set(\"usersArray\", JSON.stringify(users));\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/user/mona_s",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"mona_s"
+							]
+						},
+						"description": "This GET request retrieves detailed information about the user with the username 'mona_s' from the Pet Store API. Use this endpoint to fetch the user's profile data, including account details and status. Ensure that the 'base_url' environment variable is set correctly before sending the request. No authentication or request body is required for this operation."
+					},
+					"response": []
+				},
+				{
+					"name": "create user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 10,\r\n    \"username\": \"{{user_name}}\",\r\n    \"firstName\": \"eslam\",\r\n    \"lastName\": \"roshdy\",\r\n    \"email\": \"{{user_email}}\",\r\n    \"password\": \"{{user_password}}\",\r\n    \"phone\": \"0122266463\",\r\n    \"userStatus\": 1\r\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/user",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user"
+							]
+						},
+						"description": "# Create User\n\nThis request allows you to create a new user in the system by sending a POST request to the `{{base_url}}/user` endpoint. It is typically used for registering a new user account with the provided details. This endpoint is part of the [Pet Store API Testing](collection/33701756-d36e5013-bde3-4140-8faf-48a138c312d1) collection.\n\n---\n\n## Request Overview\n\n- **Method:** `POST`\n- **URL:** `{{base_url}}/user`\n- **Body Type:** Raw JSON (application/json)\n\n---\n\n## Request Body Parameters\n\nThe request body must be a JSON object with the following fields:\n\n| Field       | Type     | Required | Description                        |\n|-------------|----------|----------|------------------------------------|\n| `id`        | integer  | Yes      | Unique identifier for the user      |\n| `username`  | string   | Yes      | Username for the new user          |\n| `firstName` | string   | Yes      | User's first name                  |\n| `lastName`  | string   | Yes      | User's last name                   |\n| `email`     | string   | Yes      | User's email address               |\n| `password`  | string   | Yes      | Password for the user account      |\n| `phone`     | string   | No       | User's phone number                |\n| `userStatus`| integer  | No       | Status code for the user profile   |\n\n**Note:** All required fields must be provided. Optional fields can be omitted if not needed.\n\n---\n\n## Example Request Body\n\n```json\n{\n  \"id\": 10,\n  \"username\": \"johndoe\",\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"securePassword123\",\n  \"phone\": \"1234567890\",\n  \"userStatus\": 1\n}\n```\n\n---\n\n## Example Request (cURL)\n\n```bash\ncurl -X POST \"{{base_url}}/user\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"id\": 10,\n    \"username\": \"johndoe\",\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"email\": \"john.doe@example.com\",\n    \"password\": \"securePassword123\",\n    \"phone\": \"1234567890\",\n    \"userStatus\": 1\n  }'\n```\n\n---\n\n## Successful Response\n\n- **Status Code:** `200 OK`\n- **Content-Type:** `application/json`\n\n**Example Response:**\n\n```json\n{\n  \"code\": 200,\n  \"type\": \"unknown\",\n  \"message\": \"10\"\n}\n```\n\n- `code`: HTTP status code (should be 200 on success)\n- `type`: Response type (may vary by implementation)\n- `message`: Usually the user ID of the created user\n\n---\n\n## Error Responses\n\n- **400 Bad Request:** Missing required fields or invalid data\n- **409 Conflict:** Username or email already exists\n- **500 Internal Server Error:** Unexpected server error\n\nError responses will typically include an error code and message describing the issue.\n\n---\n\n## Tests\n\nThis request includes a test to verify that the response status code is 200 (OK):\n\n```javascript\npm.test(\"Status code is 200\", function () {\n    pm.response.to.have.status(200);\n});\n```\n\nYou can add additional tests to validate the response body, headers, or other aspects as needed.\n\n---\n\n## Related Resources\n\n- [Pet Store API Testing Collection](collection/33701756-d36e5013-bde3-4140-8faf-48a138c312d1)\n- [API Documentation](collection/33701756-d36e5013-bde3-4140-8faf-48a138c312d1)\n\n---\n\nFor further details or troubleshooting, refer to the collection documentation or contact the API maintainer.\n"
+					},
+					"response": []
+				},
+				{
+					"name": "check new user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"check if eslam22 exists\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"eslam22\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 12345,\r\n  \"category\": { \"id\": 1, \"name\": \"dogs\" },\r\n  \"name\": \"Rex\",\r\n  \"photoUrls\": [\"http://example.com/photo1.jpg\"],\r\n  \"tags\": [{\"id\": 1, \"name\": \"tag1\"}],\r\n  \"status\": \"available\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/user/{{user_name}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"{{user_name}}"
+							]
+						},
+						"description": "**Purpose:**\nThis GET request retrieves the details of a specific user with the username 'eslam22' from the Pet Store API.\n\n**What it retrieves:**\n- User profile information such as user ID, username, email, and other relevant details associated with 'eslam22'.\n\n**Important details:**\n- The username ('eslam22') is specified directly in the URL path.\n- The request does not require a request body.\n- A successful response (HTTP 200) returns the user's information in JSON format.\n- If the user does not exist, the API may return a 404 Not Found error.\n- Ensure the 'base_url' variable is set correctly in your environment for the request to resolve to the correct API endpoint."
+					},
+					"response": []
+				},
+				{
+					"name": "update user (eslam)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 10,\r\n    \"username\": \"{{user_name}}\",\r\n    \"firstName\": \"smsm\",\r\n    \"lastName\": \"roshdy\",\r\n    \"email\": \"{{user_email}}\",\r\n    \"password\": \"{{user_password}}\",\r\n    \"phone\": \"01022754110\",\r\n    \"userStatus\": 1\r\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/user/{{user_name}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"{{user_name}}"
+							]
+						},
+						"description": "## Update User\n\nThis request updates the details of an existing user in the system.\n\n### Purpose\nUse this endpoint to modify the information of a user identified by their username. This is typically used for profile updates or administrative changes.\n\n### URL Structure\n```\n{{base_url}}/user/{{user_name}}\n```\n- `{{base_url}}`: The base URL for the API (set in your environment).\n- `{{user_name}}`: The username of the user to update (set as a variable).\n\n### HTTP Method\n`PUT`\n\n### Request Body\nThe request body must be in raw JSON format and include the following fields:\n\n| Field        | Type    | Description                        |\n|--------------|---------|------------------------------------|\n| id           | integer | Unique identifier for the user      |\n| username     | string  | Username of the user               |\n| firstName    | string  | User's first name                  |\n| lastName     | string  | User's last name                   |\n| email        | string  | User's email address               |\n| password     | string  | User's password                    |\n| phone        | string  | User's phone number                |\n| userStatus   | integer | Status code for the user profile   |\n\n**Example Body:**\n```json\n{\n  \"id\": 10,\n  \"username\": \"{{user_name}}\",\n  \"firstName\": \"smsm\",\n  \"lastName\": \"roshdy\",\n  \"email\": \"{{user_email}}\",\n  \"password\": \"{{user_password}}\",\n  \"phone\": \"01022754110\",\n  \"userStatus\": 1\n}\n```\n\n### Expected Response\n- **Status Code:** `200 OK` if the update is successful.\n- **Response Body:** Typically returns the updated user object or a success message, depending on the API implementation.\n\n### Tests\nA test is included to verify that the response status code is 200, indicating a successful update.\n\n---\n\nFor more details, refer to the [Pet Store API Testing](collection/33701756-d36e5013-bde3-4140-8faf-48a138c312d1) collection documentation."
+					},
+					"response": []
+				},
+				{
+					"name": "check updated user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"check new name as updated\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"smsm\");\r",
+									"});\r",
+									"pm.test(\"check new mobile as updated\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"01022754110\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/user/{{user_name}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"{{user_name}}"
+							]
+						},
+						"description": "Retrieves user details for the specified user name from the base URL. Provide the desired user name as a path variable to fetch information about that user."
+					},
+					"response": []
+				},
+				{
+					"name": "delete  user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/user/ahmed_f",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"ahmed_f"
+							]
+						},
+						"description": "## Delete User by Username\n\nThis request deletes a user from the system by specifying their username in the URL path.\n\n**Purpose:**\n- Permanently removes a user account identified by the provided username.\n- Useful for user management, account cleanup, or administrative actions.\n\n**HTTP Method:**\n- `DELETE`\n\n**URL Structure:**\n- `{{base_url}}/user/{username}`\n- Replace `{{base_url}}` with your API server's base URL (e.g., `https://api.example.com`).\n- Replace `{username}` with the username of the user you wish to delete.\n- Example: `https://api.example.com/user/ahmed_f`\n\n**Path Variables:**\n- `username` (string, required): The unique username of the user to be deleted.\n\n**Important Notes:**\n- This operation is irreversible. Once a user is deleted, their data cannot be recovered.\n- Ensure you have the necessary permissions to perform this action.\n- The request typically returns a `200 OK` status code upon successful deletion.\n- If the user does not exist, the API may return a `404 Not Found` error.\n\n**Authentication:**\n- Make sure to include any required authentication headers or tokens as specified by your API.\n\n**Response:**\n- On success: Confirmation of deletion (may include a message or the deleted username).\n- On failure: Error message explaining the reason (e.g., user not found, insufficient permissions).\n"
+					},
+					"response": []
+				},
+				{
+					"name": "check deleted user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"pm.test(\"check error message (user not found)\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"User not found\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/user/ahmed_f",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"ahmed_f"
+							]
+						},
+						"description": "**Purpose:**\nThis GET request retrieves the details of a specific user identified by the username `ahmed_f` from the API.\n\n**Endpoint:**\n`GET {{base_url}}/user/ahmed_f`\n\n**What it retrieves:**\n- Returns user information if the user `ahmed_f` exists in the system.\n\n**Expected Responses:**\n- **200 OK:** User details are returned in the response body (typically as JSON).\n- **404 Not Found:** If the user does not exist, the response will have a 404 status code and include an error message such as `User not found` in the response body.\n\n**Usage Notes:**\n- No request body is required.\n- Ensure the `base_url` variable is set to the correct API base URL before sending the request."
+					},
+					"response": []
+				},
+				{
+					"name": "Login- valid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"message matches logged in\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"logged in\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"{{user_name}}\",\r\n    \"password\": \"{{user_password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/user/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"login"
+							]
+						},
+						"description": "This request logs in a user by sending their username and password in the request body as JSON. It targets the /user/login endpoint. A successful login is indicated by a 200 status code and a response message containing 'logged in'. Use the variables {{user_name}} and {{user_password}} to provide credentials. The response confirms authentication and session initiation."
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"message matches logged out\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"ok\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/user/logout",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"logout"
+							]
+						},
+						"description": "Logs out the current user from the system.\n\nA successful logout returns a 200 status code and a response message containing 'ok'."
+					},
+					"response": []
+				}
+			],
+			"description": "StartFragment\n\n## **User Collection**\n\n### 📘 Description:\n\nThis collection includes all endpoints related to **user management** — creating, logging in, updating, and deleting users.  \n  \nIt’s great for testing authentication, validation, and CRUD flows.\n\n### 🔧 Includes:\n\n- `POST /user` → Create a single user\n    \n- `POST /user/createWithList` → Create multiple users at once\n    \n- `GET /user/{username}` → Retrieve user details\n    \n- `PUT /user/{username}` → Update user info\n    \n- `DELETE /user/{username}` → Delete user\n    \n- `GET /user/login` → Login with valid credentials\n    \n- `GET /user/logout` → Logout user\n    \n\n### 🧪 Example Tests:\n\n- Validate login returns a token/message\n    \n- Verify user creation and deletion\n    \n- Negative cases: wrong username, missing password\n    \n\nEndFragment"
+		}
+	]
+}
